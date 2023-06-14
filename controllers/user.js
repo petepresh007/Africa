@@ -3,7 +3,7 @@ const { ConflictError } = require("../error");
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
 const { sign, verify } = require("jsonwebtoken");
-const nodeMailer = require("nodemailer");
+const sendEmail = require("../middleware/sendMail");
 
 //registration
 async function registration(req, res) {
@@ -22,38 +22,21 @@ async function registration(req, res) {
 
     //token
     const token = sign({ users: createduser.username, userID: createduser._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+
+    //nodemailer - send mail
+    const send_from = process.env.SMTP_MAIL;
+    const sent_to = email;
+    const subject = `Welcome to Africa`
+    const message = `
+    <h3>Your username is: ${createduser.username}</h3>
+    <h3>Your password is: ${password}</h3>
+    <p>Make sure you don't share your login details with anybody.</p>
+    `
+    await sendEmail(send_from, sent_to, subject, message);
+
     //sending a report
     //res.status(201).json({ users: { name: createduser.username }, token });
-    res.cookie("access_token", token, { sameSite: "none", secure: true }).status(201).json({ users: { name: createduser.username }, token });
-
-    //nodemailer
-    //transporter
-    // const transporter = nodeMailer.createTransport({
-    //     host: "smtp.mail.yahoo.com",
-    //     port: 465,
-    //     service: "yahoo",
-    //     secure: false,
-    //     auth: {
-    //         user: process.env.EMAIL_USERNAME,
-    //         pass: process.env.EMAIL_PASSWORD
-    //     }
-    // });
-
-    //mail options
-    // const mailOptions = {
-    //     from: "preshtech18@yahoo.com",
-    //     to: `${email}`,
-    //     subject: "Africa",
-    //     text: `Welcome ${username}`
-    // }
-    //send mail
-    // transporter.sendMail(mailOptions, (err, data) => {
-    //     if (err) {
-    //         console.log(err)
-    //     } else {
-    //         console.log(`email sent ${data.response}`);
-    //     }
-    // })
+    return res.cookie("access_token", token, { sameSite: "none", secure: true }).status(201).json({ users: { name: createduser.username }, token });
 
 }
 
