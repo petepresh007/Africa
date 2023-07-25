@@ -1,5 +1,5 @@
 //user registration and login
-const { ConflictError } = require("../error");
+const { ConflictError, BadRequestError } = require("../error");
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
 const { sign, verify } = require("jsonwebtoken");
@@ -8,6 +8,11 @@ const sendEmail = require("../middleware/sendMail");
 //registration
 async function registration(req, res) {
     const { username, email, password } = req.body;
+
+    if(!username || !email || !password)
+    {
+        throw new BadRequestError("All fields are required");
+    }
 
     //checking for duplicate user
     const user = await User.findOne({ username });
@@ -26,17 +31,17 @@ async function registration(req, res) {
     //nodemailer - send mail
     const send_from = process.env.SMTP_MAIL;
     const sent_to = email;
-    const subject = `Welcome to Africa`
+    const subject = `<h1>Welcome ${createduser.username} to Honeyland cooperaive`
     const message = `
-    <h3>Your username is: ${createduser.username}</h3>
-    <h3>Your password is: ${password}</h3>
+    <h2>Your username is: ${createduser.username}</h2>
+    <h2>Your password is: ${password}</h2>
     <p>Make sure you don't share your login details with anybody.</p>
     `
     await sendEmail(send_from, sent_to, subject, message);
 
     //sending a report
     //res.status(201).json({ users: { name: createduser.username }, token });
-    return res.cookie("access_token", token, { sameSite: "none", secure: true }).status(201).json({ users: { name: createduser.username }, token });
+    res.cookie("access_token", token, { sameSite: "none", secure: true }).status(201).json({ users: { name: createduser.username }, token });
 
 }
 
@@ -44,6 +49,9 @@ async function registration(req, res) {
 async function login(req, res) {
     //input from the users
     const { email, password } = req.body;
+    if (!email || !password){
+        throw new BadRequestError("All fields are required");
+    }
 
     //checking for a user
     const users = await User.findOne({ email });
@@ -65,7 +73,7 @@ async function login(req, res) {
 }
 
 //stay online
-function profile() {
+function profile(req, res) {
     const { access_token } = req.cookies;
     if (access_token) {
         verify(token, process.env.JWT_SECRET, {}, function (err, user) {
