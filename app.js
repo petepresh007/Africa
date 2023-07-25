@@ -24,10 +24,12 @@ app.set("view engine", "ejs")
 
 
 //Middlewares
-app.use(cors({
+app.use(
+  cors({
     credentials: true,
-    origin: "*"
-}))
+    origin: "http://localhost:5173",
+  })
+);
 app.use(cookieParser());
 app.use(express.urlencoded({extended:false}))
 
