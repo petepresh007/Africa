@@ -31,7 +31,7 @@ async function registration(req, res) {
     //nodemailer - send mail
     const send_from = process.env.SMTP_MAIL;
     const sent_to = email;
-    const subject = `<h1>Welcome ${createduser.username} to Honeyland cooperaive`
+    const subject = `<h1>Welcome to Honeyland cooperaive ${createduser.username}</h1>`;
     const message = `
     <h2>Your username is: ${createduser.username}</h2>
     <h2>Your password is: ${password}</h2>
