@@ -11,12 +11,7 @@ const { join } = require("path")
 async function registration(req, res) {
     const { username, email, password } = req.body;
 
-<<<<<<< HEAD
     if(!username || !email || !password){
-=======
-    if(!username || !email || !password)
-    {
->>>>>>> 30bfb3f4572d83292243f3bd02dddc51daed4106
         throw new BadRequestError("All fields are required");
     }
 
@@ -43,11 +38,7 @@ async function registration(req, res) {
     //nodemailer - send mail
     const send_from = process.env.SMTP_MAIL;
     const sent_to = email;
-<<<<<<< HEAD
     const subject = `Honeyland Cooperative`
-=======
-    const subject = `<h1>Welcome to Honeyland cooperaive ${createduser.username}</h1>`;
->>>>>>> 30bfb3f4572d83292243f3bd02dddc51daed4106
     const message = `
     <h2>Your username is: ${createduser.username}</h2>
     <h2>Your password is: ${password}</h2>
