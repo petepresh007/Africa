@@ -27,14 +27,8 @@ app.set("view engine", "ejs")
 app.use(
   cors({
     credentials: true,
-<<<<<<< HEAD
     origin: "http://localhost:5173"
 }))
-=======
-    origin: "http://localhost:5173",
-  })
-);
->>>>>>> 30bfb3f4572d83292243f3bd02dddc51daed4106
 app.use(cookieParser());
 app.use(express.urlencoded({extended:false}));
 
