@@ -11,7 +11,12 @@ const { join } = require("path")
 async function registration(req, res) {
     const { username, email, password } = req.body;
 
+<<<<<<< HEAD
     if(!username || !email || !password){
+=======
+    if(!username || !email || !password)
+    {
+>>>>>>> 30bfb3f4572d83292243f3bd02dddc51daed4106
         throw new BadRequestError("All fields are required");
     }
 
@@ -38,17 +43,21 @@ async function registration(req, res) {
     //nodemailer - send mail
     const send_from = process.env.SMTP_MAIL;
     const sent_to = email;
+<<<<<<< HEAD
     const subject = `Honeyland Cooperative`
+=======
+    const subject = `<h1>Welcome to Honeyland cooperaive ${createduser.username}</h1>`;
+>>>>>>> 30bfb3f4572d83292243f3bd02dddc51daed4106
     const message = `
-    <h3>Your username is: ${createduser.username}</h3>
-    <h3>Your password is: ${password}</h3>
+    <h2>Your username is: ${createduser.username}</h2>
+    <h2>Your password is: ${password}</h2>
     <p>Make sure you don't share your login details with anybody.</p>
     `
     await sendEmail(send_from, sent_to, subject, message);
 
     //sending a report
     //res.status(201).json({ users: { name: createduser.username }, token });
-    return res.cookie("access_token", token, { sameSite: "none", secure: true }).status(201).json({ users: { name: createduser.username }, token });
+    res.cookie("access_token", token, { sameSite: "none", secure: true }).status(201).json({ users: { name: createduser.username }, token });
 
 }
 
@@ -56,6 +65,9 @@ async function registration(req, res) {
 async function login(req, res) {
     //input from the users
     const { email, password } = req.body;
+    if (!email || !password){
+        throw new BadRequestError("All fields are required");
+    }
 
     //checking for a user
     const users = await User.findOne({ email });
