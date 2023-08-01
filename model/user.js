@@ -14,7 +14,8 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: [true, "please enter a password"],
-    }
+    },
+    avatar:String
 }, { timestamps: true });
 
 

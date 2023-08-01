@@ -1,9 +1,9 @@
 const express = require("express");
-
 const router = express.Router();
 const { registration, login, profile, logoutUser, forgetPassword, reset_password, reset_password_post } = require("../controllers/user");
+const upload = require("../multer");
 
-router.post("/registration", registration);
+router.post("/registration", upload.single("file"), registration);
 router.post("/login", login);
 router.get("/profile", profile);
 router.post("/logout", logoutUser);

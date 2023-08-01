@@ -26,10 +26,15 @@ app.set("view engine", "ejs")
 //Middlewares
 app.use(cors({
     credentials: true,
-    origin: "*"
+    origin: "http://localhost:5173"
 }))
 app.use(cookieParser());
-app.use(express.urlencoded({extended:false}))
+app.use(express.urlencoded({extended:false}));
+
+//setting the picture route
+app.use("/upload", express.static("/upload"));
+
+
 
 app.use(express.json());
 app.use("/api/v1/user", user);

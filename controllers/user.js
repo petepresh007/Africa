@@ -1,13 +1,19 @@
 //user registration and login
-const { ConflictError } = require("../error");
+const { ConflictError, BadRequestError } = require("../error");
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
 const { sign, verify } = require("jsonwebtoken");
 const sendEmail = require("../middleware/sendMail");
+const { join } = require("path")
+
 
 //registration
 async function registration(req, res) {
     const { username, email, password } = req.body;
+
+    if(!username || !email || !password){
+        throw new BadRequestError("All fields are required");
+    }
 
     //checking for duplicate user
     const user = await User.findOne({ username });
@@ -17,16 +23,22 @@ async function registration(req, res) {
 
     //hashing the password
     const encryptedPassword = await bcrypt.hash(password, 10); //10 salt round
-    const createduser = new User({ username, email, password: encryptedPassword });
+    //handling files
+    /*const filename = req.file.filename;
+    const fileUrl = join(filename);*/
+
+    const createduser = new User({ username, email, password: encryptedPassword});
     await createduser.save();
 
     //token
     const token = sign({ users: createduser.username, userID: createduser._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 
+
+
     //nodemailer - send mail
     const send_from = process.env.SMTP_MAIL;
     const sent_to = email;
-    const subject = `Welcome to Africa`
+    const subject = `Honeyland Cooperative`
     const message = `
     <h3>Your username is: ${createduser.username}</h3>
     <h3>Your password is: ${password}</h3>
@@ -65,10 +77,10 @@ async function login(req, res) {
 }
 
 //stay online
-function profile() {
+function profile(req, res) {
     const { access_token } = req.cookies;
     if (access_token) {
-        verify(token, process.env.JWT_SECRET, {}, function (err, user) {
+        verify(access_token, process.env.JWT_SECRET, {}, function (err, user) {
             if (err) throw err;
             res.status(200).json(user);
         })
