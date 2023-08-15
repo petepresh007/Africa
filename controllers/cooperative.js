@@ -11,10 +11,23 @@ const getAllTask = async (req, res) => {
     res.status(200).json({ msg: { data: funds, user: req.users.users } });
 }
 
+const getSingleTask = async (req, res)=>{
+    const {
+      users: { userID },
+      params: { id: id },
+    } = req;
+
+    const funds = await Cooperative.find({createdBy:userID, _id: id});
+    if(!funds){
+        return res.status(404).json({success: false, msg: "fund not found"});
+    }
+    res.status(200).json({ msg: { data: funds, user: req.users.users } });
+}
+
 const createTask = async (req, res) => {
     const { username, password, email, available_balance, monthly_saving, loan_amount, loan_balance, monthly_deduction } = req.body;
 
-    if (!username || !password || !email || !monthly_saving || !loan_amount || !loan_balance || !monthly_deduction) {
+    if (!username || !password || !email || !monthly_saving) {
         throw new BadRequestError("All fields are required..");
     }
 
@@ -103,4 +116,4 @@ const deleteTask = async (req, res) => {
 }
 
 //export module 
-module.exports = { getAllTask, createTask, updateTask, deleteTask };
+module.exports = { getAllTask, createTask, updateTask, deleteTask, getSingleTask };
