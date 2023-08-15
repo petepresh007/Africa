@@ -15,7 +15,7 @@ const auth = async (req, res, next) => {
         req.users = { users: decodUser.users, userID: decodUser.userID }
         next()
     } catch (error) {
-        throw NotAuthorized("Not authorized to access this route")
+        throw new NotAuthorized("Not authorized to access this route")
     }
 }
 

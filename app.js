@@ -12,6 +12,7 @@ const auth = require("./middleware/authentication");
 const cors = require("cors");
 const connectDB = require("./db/connectDB");
 const cookieParser = require("cookie-parser");
+const cooperativer_router = require("./routers/cooperativeRouter");
 //const ejs = require("ejs");
 
 
@@ -25,12 +26,12 @@ app.set("view engine", "ejs")
 
 //Middlewares
 app.use(
-  cors({
-    credentials: true,
-    origin: "http://localhost:5173"
-}))
+    cors({
+        credentials: true,
+        origin: "http://localhost:5173"
+    }))
 app.use(cookieParser());
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 
 //setting the picture route
 app.use("/upload", express.static("/upload"));
@@ -39,6 +40,7 @@ app.use("/upload", express.static("/upload"));
 
 app.use(express.json());
 app.use("/api/v1/user", user);
+app.use("/api/v1/cooperative", auth, cooperativer_router);
 app.use("/api/v1/africa", auth, africa);
 
 

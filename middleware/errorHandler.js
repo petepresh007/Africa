@@ -10,7 +10,7 @@ const errorHandler = (err, req, res, next) => {
     }
 
     //validation error
-    if (err.name === "ValidationError") {
+    if (err.name === "ValidatorError") {
         CustomError.msg = Object.values(err.errors).map((item) => {
             item.message.join(",");
         })

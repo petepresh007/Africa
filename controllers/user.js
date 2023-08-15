@@ -11,7 +11,7 @@ const { join } = require("path")
 async function registration(req, res) {
     const { username, email, password } = req.body;
 
-    if(!username || !email || !password){
+    if (!username || !email || !password) {
         throw new BadRequestError("All fields are required");
     }
 
@@ -27,7 +27,7 @@ async function registration(req, res) {
     /*const filename = req.file.filename;
     const fileUrl = join(filename);*/
 
-    const createduser = new User({ username, email, password: encryptedPassword});
+    const createduser = new User({ username, email, password: encryptedPassword });
     await createduser.save();
 
     //token
@@ -56,7 +56,7 @@ async function registration(req, res) {
 async function login(req, res) {
     //input from the users
     const { email, password } = req.body;
-    if (!email || !password){
+    if (!email || !password) {
         throw new BadRequestError("All fields are required");
     }
 
