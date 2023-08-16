@@ -11,15 +11,15 @@ const getAllTask = async (req, res) => {
     res.status(200).json({ msg: { data: funds, user: req.users.users } });
 }
 
-const getSingleTask = async (req, res)=>{
+const getSingleTask = async (req, res) => {
     const {
-      users: { userID },
-      params: { id: id },
+        users: { userID },
+        params: { id: id },
     } = req;
 
-    const funds = await Cooperative.find({createdBy:userID, _id: id});
-    if(!funds){
-        return res.status(404).json({success: false, msg: "fund not found"});
+    const funds = await Cooperative.find({ createdBy: userID, _id: id });
+    if (!funds) {
+        return res.status(404).json({ success: false, msg: "fund not found" });
     }
     res.status(200).json({ msg: { data: funds, user: req.users.users } });
 }
@@ -77,17 +77,18 @@ const updateTask = async (req, res) => {
     const { available_balance, monthly_saving, loan_amount, loan_balance, monthly_deduction, } = req.body;
     /**finding the user and updating the users account with the current task */
 
-    const user = await Cooperative.find({ createdBy: req.users.userID });
-    let monthly = user.map((data) => {
-        const { available_balance } = data;
-        return available_balance;
-    })
+    // const user = await Cooperative.find({ createdBy: req.users.userID });
+    // let monthly = user.map((data) => {
+    //     const { available_balance } = data;
+    //     return Number(available_balance);
+    // })
     //console.log(monthly[0]);
-    let balance = monthly[0] + available_balance;
-    count += balance;
+    // let balance = Number(monthly[0]) + Number(available_balance);
+    // count += balance;
+    // console.log(count);
+    // console.log(balance)
 
-
-    const updatedUser = { available_balance: balance, monthly_saving, loan_amount, loan_balance, monthly_deduction };
+    const updatedUser = { available_balance, monthly_saving, loan_amount, loan_balance, monthly_deduction };
     /**console.log(updatedUser);*/
 
     const task = await Cooperative.findOneAndUpdate({
