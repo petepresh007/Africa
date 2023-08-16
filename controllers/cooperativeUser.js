@@ -45,11 +45,20 @@ const registration = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    const { email, password } = req.body;
+    const {
+      username,
+      email,
+      password,
+      available_balance,
+      monthly_saving,
+      loan_amount,
+      loan_balance,
+      monthly_deduction,
+    } = req.body;
     if (!email || !password) {
         throw BadRequestError("All fields are required");
     }
-
+    
     //check for users
     const user = await Cooperative.findOne({ email });
     if (!user) {
@@ -64,34 +73,37 @@ const login = async (req, res) => {
     }
 
     //token
-    const token = JWT.sign({ user: newUser.username, userID: newUser._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+    const token = JWT.sign({ 
+        user: user.username, 
+        userID: user._id,
+        availableBalance:available_balance,
+        monthlySavings: monthly_saving,
+        loanAmount: loan_amount,
+        loanBalance: loan_balance,
+        monthlyDeduction: monthly_deduction,
+    }, process.env.JWT_SECRET, { expiresIn: "30d" });
     //response to user
-    res.cookie(token, "user_token", { samSite: "none", secure: true }).status(201).json({ msg: newUser.user_token });
+    res.cookie(token, "user_token", { samSite: "none", secure: true }).status(200).json({ msg: user, token});
 }
 
 
 //stay logged in
-const stay_logged_in = () => {
-    //getting the token from  the user
-    const authheaders = req.headers.authorization;
-    //confirming token
-    if (!authheaders || !authheaders.startsWith("Bearer")) {
+const stay_logged_in = (req, res) => {
+    const authHeaders = req.headers.authorization
+    if(!authHeaders || !authHeaders.startsWith("Bearer")){
         throw new NotAuthorized("Not authorized to access this route");
     }
-
-    const token = authheaders.split(" ")[1];
+    const token = authHeaders.split(" ")[1];
     try {
-        if (token) {
-            const decoded = JWT.verify(token, JWT_SECRET);
-            res.status(200).json({ decoded });
-        }
+        const decoded = JWT.verify(token, process.env.JWT_SECRET);
+        res.status(200).json({decoded})
     } catch (error) {
-        throw new NotAuthorized(`Not authorized to access this route\n${error.message}`);
+        throw new NotAuthorized("Provide a valid token ");
     }
 }
 
 //logout route
-const logout = () => {
+const logout = (req, res) => {
     return res.cookie("user_token", "").json(true);
 }
 

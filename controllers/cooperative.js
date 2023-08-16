@@ -55,12 +55,12 @@ const createTask = async (req, res) => {
     const sent_to = newUser.email;
     const subject = `Welcome ${newUser.username}`
     const message = `
-        <p>An account has been created for you by honeyland cooperative</p>
+        <p>Dear <span classname = "font-bold">${newUser.username}</span> An account has been created for you by honeyland cooperative</p>
         <p> follow the link below to access your account with the following details</p>
         <p>link</p>
         <p>Name: ${newUser.username}</p>
         <p>Password: ${password}</p>
-    `
+    `;
     //sending the mail
     await sendMail(sent_from, sent_to, subject, message);
     //end

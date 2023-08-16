@@ -7,8 +7,8 @@ const auth = async (req, res, next) => {
     if (!authHeaders || !authHeaders.startsWith('Bearer')) {
         throw new NotAuthorized("Not authorized to access this route");
     }
-    console.log(authHeaders);
-    const token = authHeaders.split("=")[1];
+    //console.log(authHeaders);
+    const token = authHeaders.split(" ")[1];
     try {
         const decodUser = verify(token, process.env.JWT_SECRET)
         // const {users, userID} = decodUser; one way

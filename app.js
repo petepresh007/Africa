@@ -13,6 +13,7 @@ const cors = require("cors");
 const connectDB = require("./db/connectDB");
 const cookieParser = require("cookie-parser");
 const cooperativer_router = require("./routers/cooperativeRouter");
+const userLogin_router = require("./routers/userLoginRouter")
 //const ejs = require("ejs");
 
 
@@ -40,8 +41,9 @@ app.use("/upload", express.static("/upload"));
 
 app.use(express.json());
 app.use("/api/v1/user", user);
-app.use("/api/v1/cooperative", auth, cooperativer_router);
-app.use("/api/v1/africa", auth, africa);
+app.use("/api/v1/cooperative", auth,cooperativer_router); // auth,
+app.use("/api/v1/africa",  auth,africa);
+app.use("/api/v1/auth", userLogin_router);
 
 
 
