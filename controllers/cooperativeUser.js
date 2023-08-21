@@ -86,6 +86,16 @@ const login = async (req, res) => {
     res.cookie(token, "user_token", { samSite: "none", secure: true }).status(200).json({ msg: user, token});
 }
 
+const getSingleUserWithoutAuth = async (req, res) => {
+    const {id: id} = req.params
+    const fund = await Cooperative.find({_id:id});
+    console.log(fund);
+    
+    // if (!fund) {
+    //   return res.status(404).json({ success: false, msg: "fund not found" });
+    // }
+    // res.status(200).json({ msg: { data: fund,  } });
+}
 
 //stay logged in
 const stay_logged_in = (req, res) => {
@@ -111,5 +121,6 @@ module.exports = {
     registration,
     login,
     stay_logged_in,
-    logout
+    logout,
+    getSingleUserWithoutAuth,
 }

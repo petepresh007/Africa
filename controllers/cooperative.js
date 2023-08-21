@@ -24,6 +24,10 @@ const getSingleTask = async (req, res) => {
     res.status(200).json({ msg: { data: funds, user: req.users.users } });
 }
 
+
+
+
+
 const createTask = async (req, res) => {
     const { username, password, email, available_balance, monthly_saving, loan_amount, loan_balance, monthly_deduction } = req.body;
 
