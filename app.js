@@ -29,7 +29,7 @@ app.set("view engine", "ejs")
 app.use(
   cors({
     credentials: true,
-    origin: "https://honeyland-cooperative-portal.vercel.app",
+    origin: "http://localhost:5174",
   })
 );
 
