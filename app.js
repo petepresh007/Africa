@@ -50,7 +50,7 @@ app.use("/api/v1/auth", userLogin_router);
 
 
 
-app.get("/", (req, res)=>{
+app.get("/about", (req, res)=>{
     res.send("welcome to this API");
 })
 
