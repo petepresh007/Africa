@@ -3,7 +3,7 @@ require("dotenv").config();
 require("express-async-errors");
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 const pageNotFound = require("./middleware/pageNotFound");
 const errorHandler = require("./middleware/errorHandler");
 const user = require("./routers/user");
@@ -27,10 +27,11 @@ app.set("view engine", "ejs")
 
 //Middlewares
 app.use(
-    cors({
-        credentials: true,
-        origin: "http://localhost:5174"
-    }))
+  cors({
+    credentials: true,
+    origin: "https://honeyland-cooperative-portal.vercel.app",
+  })
+);
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
@@ -49,7 +50,9 @@ app.use("/api/v1/auth", userLogin_router);
 
 
 
-
+app.get("/", (req, res)=>{
+    res.send("welcome to this API");
+})
 
 
 
@@ -63,7 +66,7 @@ app.use(errorHandler)
 async function starter() {
     try {
         await connectDB();
-        app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+        app.listen(port, () => console.log(`Server listening on port ${port}`));
         console.log("connected to db successfully...")
     } catch (error) {
         console.log(error.message);
