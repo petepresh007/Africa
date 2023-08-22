@@ -56,13 +56,13 @@ const login = async (req, res) => {
       monthly_deduction,
     } = req.body;
     if (!email || !password) {
-        throw BadRequestError("All fields are required");
+        throw new BadRequestError("All fields are required");
     }
     
     //check for users
     const user = await Cooperative.findOne({ email });
     if (!user) {
-        throw ConflictError("invalid user, try again!!");
+        throw new ConflictError("invalid user, try again!!");
     }
 
     const isPassword = await bcrypt.compare(password, user.password);
@@ -91,10 +91,10 @@ const getSingleUserWithoutAuth = async (req, res) => {
     const fund = await Cooperative.find({_id:id});
     console.log(fund);
     
-    // if (!fund) {
-    //   return res.status(404).json({ success: false, msg: "fund not found" });
-    // }
-    // res.status(200).json({ msg: { data: fund,  } });
+    if (!fund) {
+      return res.status(404).json({ success: false, msg: "fund not found" });
+    }
+    res.status(200).json({ msg: { data: fund,  } });
 }
 
 //stay logged in
