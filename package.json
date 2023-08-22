@@ -5,10 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemone app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Peter Precious",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
