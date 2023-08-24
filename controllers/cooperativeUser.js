@@ -54,6 +54,7 @@ const login = async (req, res) => {
       loan_amount,
       loan_balance,
       monthly_deduction,
+      total_loan_paid
     } = req.body;
     if (!email || !password) {
         throw new BadRequestError("All fields are required");
@@ -81,6 +82,7 @@ const login = async (req, res) => {
         loanAmount: loan_amount,
         loanBalance: loan_balance,
         monthlyDeduction: monthly_deduction,
+        totalLoanPaid: total_loan_paid
     }, process.env.JWT_SECRET, { expiresIn: "30d" });
     //response to user
     res.cookie(token, "user_token", { samSite: "none", secure: true }).status(200).json({ msg: user, token});
